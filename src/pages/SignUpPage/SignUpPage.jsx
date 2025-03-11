@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router";
+import useRequest from "../../APIServices/useRequest";
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import Swal from "sweetalert2";
 
 function SignupPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,8 +14,12 @@ function SignupPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userImg, setUserImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
+  const [userRole, setUserRole] = useState(0);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [style, setStyle] = useState({});
+  const [postRequest, getRequest] = useRequest();
+  const { loading, setLoading } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleMouseMove = (e) => {
     const { clientX, clientY, currentTarget } = e;
@@ -50,18 +57,35 @@ function SignupPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    console.log("Signup details:", {
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
-      phoneNumber,
-      userImg,
-      acceptTerms,
+    const formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("userImg", userImg);
+    formData.append("userRole", 2);
+
+    // Option 1: Log each entry
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
+    const crtUser = await postRequest("/auth/register", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
+
+    if (crtUser?.data?.error === false) {
+      console.log(crtUser, "Create User");
+      setLoading(false);
+      Swal.fire("User Registered Successfully");
+    }
+    navigate("/");
   };
 
   if (isLoading) {
@@ -113,6 +137,11 @@ function SignupPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-sky-600/40 to-indigo-800/40 backdrop-blur-sm"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="animate-fadeInUp">
+              <img
+                src="https://i.ibb.co/ZB88ShC/Final-V.png"
+                className="w-16 h-20 pb-5"
+                alt=""
+              />
               <h1 className="text-white text-4xl font-bold mb-4">
                 Join Our Community
               </h1>
@@ -203,7 +232,7 @@ function SignupPage() {
                     First Name
                   </label>
                   <div className="relative group">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -222,7 +251,7 @@ function SignupPage() {
                       id="firstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="pl-10 w-full bg-white/5 border border-indigo-300/30 rounded-lg py-3 px-4 text-white placeholder-sky-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                      className="pl-10 w-full bg-white border border-indigo-300/30 rounded-lg py-3 px-4 text-black placeholder-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                       placeholder="John"
                       required
                     />
@@ -236,7 +265,7 @@ function SignupPage() {
                     Last Name
                   </label>
                   <div className="relative group">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -255,7 +284,7 @@ function SignupPage() {
                       id="lastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="pl-10 w-full bg-white/5 border border-indigo-300/30 rounded-lg py-3 px-4 text-white placeholder-sky-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                      className="pl-10 w-full bg-white border border-indigo-300/30 rounded-lg py-3 px-4 text-black placeholder-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                       placeholder="Doe"
                       required
                     />
@@ -272,7 +301,7 @@ function SignupPage() {
                   Username
                 </label>
                 <div className="relative group">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
@@ -291,7 +320,7 @@ function SignupPage() {
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="pl-10 w-full bg-white/5 border border-indigo-300/30 rounded-lg py-3 px-4 text-white placeholder-sky-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                    className="pl-10 w-full bg-white border border-indigo-300/30 rounded-lg py-3 px-4 text-black placeholder-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                     placeholder="johndoe123"
                     required
                   />
@@ -307,7 +336,7 @@ function SignupPage() {
                   Email
                 </label>
                 <div className="relative group">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
@@ -323,7 +352,7 @@ function SignupPage() {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 w-full bg-white/5 border border-indigo-300/30 rounded-lg py-3 px-4 text-white placeholder-sky-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                    className="pl-10 w-full bg-white border border-indigo-300/30 rounded-lg py-3 px-4 text-black placeholder-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                     placeholder="your@email.com"
                     required
                   />
@@ -339,7 +368,7 @@ function SignupPage() {
                   Password
                 </label>
                 <div className="relative group">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
@@ -358,7 +387,7 @@ function SignupPage() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 w-full bg-white/5 border border-sky-300/30 rounded-lg py-3 px-4 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                    className="pl-10 w-full bg-white border border-sky-300/30 rounded-lg py-3 px-4 text-black placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                     placeholder="••••••••"
                     required
                   />
@@ -374,7 +403,7 @@ function SignupPage() {
                   Phone Number
                 </label>
                 <div className="relative group">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 group-focus-within:text-white transition-colors">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-300 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
@@ -389,7 +418,7 @@ function SignupPage() {
                     id="phoneNumber"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="pl-10 w-full bg-white/5 border border-indigo-300/30 rounded-lg py-3 px-4 text-white placeholder-sky-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+                    className="pl-10 w-full bg-white border border-indigo-300/30 rounded-lg py-3 px-4 text-black placeholder-sky-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
                     placeholder="(123) 456-7890"
                   />
                 </div>
@@ -479,24 +508,28 @@ function SignupPage() {
 
               {/* Sign up button */}
               <div className="animate-fadeInUp delay-900">
-                <button
-                  type="submit"
-                  className="w-full flex justify-center items-center bg-gradient-to-r from-blue-600 to-sky-600 text-white font-medium py-3 px-4 rounded-lg cursor-pointer hover:from-sky-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all hover:-translate-y-1 active:translate-y-0 active:shadow-inner shadow-lg"
-                >
-                  <span>Create Account</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 ml-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                {acceptTerms ? (
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center items-center bg-gradient-to-r from-blue-600 to-sky-600 text-white font-medium py-3 px-4 rounded-lg cursor-pointer hover:from-sky-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all hover:-translate-y-1 active:translate-y-0 active:shadow-inner shadow-lg"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
+                    <span>Create Account</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 ml-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <></>
+                )}
               </div>
             </form>
 

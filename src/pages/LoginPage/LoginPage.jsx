@@ -84,6 +84,11 @@ function LoginPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-green-600/40 via-teal-600/40 to-lime-800/40 backdrop-blur-sm"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="animate-fadeInUp">
+              <img
+                src="https://i.ibb.co/ZB88ShC/Final-V.png"
+                className="w-16 h-20 pb-5"
+                alt=""
+              />
               <h1 className="text-white text-4xl font-bold mb-4">
                 Welcome Back
               </h1>
