@@ -4,6 +4,7 @@ import SignupPage from "./pages/SignUpPage/SignUpPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import UserLayout from "./layouts/userLayout/UserLayout";
 import HomePage from "./pages/HomePage/HomePage";
+import UserDashHomePage from "./pages/UserDashHomePage/UserDashHomePage";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
 
         <Route element={<UserLayout/>}>
-          <Route path="/" element={<HomePage/>}/>
+          <Route path="/user/dash" element={<UserDashHomePage/>}/>
         </Route>
       </Routes>
     </div>

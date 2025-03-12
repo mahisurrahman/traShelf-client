@@ -81,18 +81,20 @@ function LoginPage() {
       <div className="flex flex-col md:flex-row w-full max-w-6xl mx-4 md:mx-8 lg:mx-auto relative z-10 shadow-2xl rounded-2xl overflow-hidden animate-fadeIn">
         {/* Left panel - illustration */}
         <div className="hidden md:block w-1/2 bg-teal-800 p-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-600/40 via-teal-600/40 to-lime-800/40 backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-green-600/40 via-green-600/40 to-lime-500/40 backdrop-blur-sm"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="animate-fadeInUp">
-              <img
-                src="https://i.ibb.co/ZB88ShC/Final-V.png"
-                className="w-16 h-20 pb-5"
-                alt=""
-              />
-              <h1 className="text-white text-4xl font-bold mb-4">
+              <div className="w-full flex items-center justify-center">
+                <img
+                  src="https://i.ibb.co/ZB88ShC/Final-V.png"
+                  className="w-16 h-20 pb-5"
+                  alt=""
+                />
+              </div>
+              <h1 className="text-white text-4xl font-bold mb-4 text-center">
                 Welcome Back
               </h1>
-              <p className="text-teal-200 text-lg">
+              <p className="text-teal-200 text-lg text-center">
                 Access your account and continue your journey with us.
               </p>
             </div>
@@ -268,7 +270,7 @@ function LoginPage() {
               <div className="animate-fadeInUp delay-500">
                 <button
                   type="submit"
-                  className="w-full flex justify-center items-center bg-gradient-to-r from-green-600 to-teal-600 text-white font-medium py-3 px-4 rounded-lg cursor-pointer hover:from-teal-700 hover:to-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform transition-all hover:-translate-y-1 active:translate-y-0 active:shadow-inner shadow-lg"
+                  className="w-full flex justify-center items-center bg-gradient-to-r from-green-600 to-lime-600 text-white font-medium py-3 px-4 rounded-lg cursor-pointer hover:from-lime-700 hover:to-lime-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transform transition-all hover:-translate-y-1 active:translate-y-0 active:shadow-inner shadow-lg"
                 >
                   <span>Sign in</span>
                   <svg

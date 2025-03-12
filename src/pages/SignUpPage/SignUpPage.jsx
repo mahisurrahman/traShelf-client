@@ -137,15 +137,17 @@ function SignupPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-sky-600/40 to-indigo-800/40 backdrop-blur-sm"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="animate-fadeInUp">
-              <img
-                src="https://i.ibb.co/ZB88ShC/Final-V.png"
-                className="w-16 h-20 pb-5"
-                alt=""
-              />
-              <h1 className="text-white text-4xl font-bold mb-4">
+              <div className="w-full flex items-center justify-center">
+                <img
+                  src="https://i.ibb.co/ZB88ShC/Final-V.png"
+                  className="w-16 h-20 pb-5"
+                  alt=""
+                />
+              </div>
+              <h1 className="text-white text-4xl font-bold mb-4 text-center">
                 Join Our Community
               </h1>
-              <p className="text-sky-200 text-lg">
+              <p className="text-sky-200 text-lg text-center">
                 Create your account and start your journey with us today.
               </p>
             </div>
