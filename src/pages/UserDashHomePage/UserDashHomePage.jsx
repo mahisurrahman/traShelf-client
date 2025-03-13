@@ -6,33 +6,28 @@ import {
   BarChart3,
   BookOpen,
   Heart,
-  Bookmark,
   Search,
-  Menu,
-  X,
   Plus,
   User,
-  LogOut,
-  Bell,
-  TrendingUp,
   Calendar,
   Users,
   Tag,
   Star,
   Award,
-  BookMarked,
   Gift,
   Zap,
-  List,
   Clock8,
   Target,
 } from "lucide-react";
+import UserDashCurrentlyReading from "../../components/UserDashCompos/userDashCurrentlyReading/UserDashCurrentlyReading";
+import UserDashReadingActivity from "../../components/UserDashCompos/UserDashReadingAcitivity/UserDashReadingActivity";
+import UserDashTotalEarned from "../../components/UserDashCompos/UserDashTotalEarned/UserDashTotalEarned";
+import UserDashReadingGoals from "../../components/UserDashCompos/UserDashReadingGoals/UserDashReadingGoals";
 
 const UserDashHomePage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
 
-  // Sample data for charts and statistics
   const readingStats = [
     { month: "Jan", hours: 12 },
     { month: "Feb", hours: 19 },
@@ -117,24 +112,6 @@ const UserDashHomePage = () => {
       totalCost: 22.75,
       progress: 65,
       coverColor: "bg-teal-500",
-    },
-  ];
-
-  const notifications = [
-    {
-      id: 1,
-      message: 'Your book "The Art of Programming" was rented by a new user',
-      time: "2 hours ago",
-    },
-    {
-      id: 2,
-      message: "You earned $15.50 from rentals today",
-      time: "5 hours ago",
-    },
-    {
-      id: 3,
-      message: "New recommended book based on your preferences",
-      time: "1 day ago",
     },
   ];
 
@@ -293,256 +270,13 @@ const UserDashHomePage = () => {
   // Functions to render different dashboard sections
   const renderDashboardContent = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div className="bg-white rounded-lg shadow-md p-6 col-span-full">
-        <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <BookOpen className="mr-2 text-indigo-600" size={20} />
-          Currently Reading
-        </h2>
-        <div className="space-y-4">
-          {currentlyReading.map((book) => (
-            <div
-              key={book.id}
-              className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <div
-                className={`${book.coverColor} w-12 h-16 rounded flex items-center justify-center text-white`}
-              >
-                <Book size={24} />
-              </div>
-              <div className="ml-4 flex-1">
-                <h3 className="font-medium">{book.title}</h3>
-                <p className="text-sm text-gray-600">{book.author}</p>
-                <div className="mt-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div
-                      className="bg-indigo-600 h-2.5 rounded-full"
-                      style={{ width: `${book.progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs mt-1">
-                    <span>{book.progress}% complete</span>
-                    <span>{book.hoursRead} hours read</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-2 text-sm">
-                  <span className="flex items-center">
-                    <Clock size={14} className="mr-1 text-gray-500" />$
-                    {book.hourlyRate}/hour
-                  </span>
-                  <span className="text-indigo-600">
-                    Total: ${book.totalCost.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <UserDashCurrentlyReading currentlyReading={currentlyReading} />
 
-      <div className="bg-white rounded-lg shadow-md p-6 col-span-full lg:col-span-2">
-        <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <BarChart3 className="mr-2 text-indigo-600" size={20} />
-          Your Reading Activity
-        </h2>
-        <div className="h-64 flex items-end space-x-2">
-          {readingStats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center flex-1">
-              <div
-                className="bg-indigo-600 hover:bg-indigo-700 w-full rounded-t transition-all duration-300"
-                style={{
-                  height: `${(stat.hours / 25) * 200}px`,
-                  animation: `growUp 1s ease-out ${index * 0.1}s`,
-                }}
-              ></div>
-              <span className="text-xs mt-1">{stat.month}</span>
-            </div>
-          ))}
-        </div>
-        <style jsx>{`
-          @keyframes growUp {
-            from {
-              height: 0;
-            }
-          }
-        `}</style>
-        <div className="mt-4 flex justify-between text-sm text-gray-600">
-          <div>Total Reading Hours: 119</div>
-          <div>Average: 19.8 hours/month</div>
-        </div>
-      </div>
+      <UserDashReadingActivity readingStats={readingStats} />
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <DollarSign className="mr-2 text-indigo-600" size={20} />
-          Your Earnings
-        </h2>
-        <div className="text-3xl font-bold text-gray-900 mb-2">$291.25</div>
-        <p className="text-green-600 text-sm flex items-center mb-4">
-          <span className="mr-1">↑</span> 12% from last month
-        </p>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center text-sm">
-            <span>Total Books Shared</span>
-            <span className="font-medium">{myBooks.length}</span>
-          </div>
-          <div className="flex justify-between items-center text-sm">
-            <span>Total Rentals</span>
-            <span className="font-medium">
-              {myBooks.reduce((sum, book) => sum + book.rentedTimes, 0)}
-            </span>
-          </div>
-          <div className="flex justify-between items-center text-sm">
-            <span>Most Popular</span>
-            <span className="font-medium">
-              {myBooks.sort((a, b) => b.rentedTimes - a.rentedTimes)[0].title}
-            </span>
-          </div>
-        </div>
-      </div>
+      <UserDashTotalEarned myBooks={myBooks} />
 
-      {/* NEW SECTION: Reading Goals */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <Target className="mr-2 text-indigo-600" size={20} />
-          Reading Goals
-        </h2>
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-sm font-medium">Overall Progress</span>
-            <span className="text-sm text-indigo-600">
-              {readingGoals.progress}%
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div
-              className="bg-indigo-600 h-2.5 rounded-full"
-              style={{ width: `${readingGoals.progress}%` }}
-            ></div>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Weekly Goal</h3>
-              <p className="text-sm text-gray-600">
-                {readingGoals.weekly.current} of {readingGoals.weekly.target}{" "}
-                {readingGoals.weekly.unit}
-              </p>
-            </div>
-            <div className="relative h-10 w-10">
-              <svg viewBox="0 0 36 36" className="h-10 w-10">
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#E5E7EB"
-                  strokeWidth="3"
-                />
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#4F46E5"
-                  strokeWidth="3"
-                  strokeDasharray={`${
-                    (readingGoals.weekly.current / readingGoals.weekly.target) *
-                    100
-                  }, 100`}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                {Math.round(
-                  (readingGoals.weekly.current / readingGoals.weekly.target) *
-                    100
-                )}
-                %
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Monthly Goal</h3>
-              <p className="text-sm text-gray-600">
-                {readingGoals.monthly.current} of {readingGoals.monthly.target}{" "}
-                {readingGoals.monthly.unit}
-              </p>
-            </div>
-            <div className="relative h-10 w-10">
-              <svg viewBox="0 0 36 36" className="h-10 w-10">
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#E5E7EB"
-                  strokeWidth="3"
-                />
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#4F46E5"
-                  strokeWidth="3"
-                  strokeDasharray={`${
-                    (readingGoals.monthly.current /
-                      readingGoals.monthly.target) *
-                    100
-                  }, 100`}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                {Math.round(
-                  (readingGoals.monthly.current / readingGoals.monthly.target) *
-                    100
-                )}
-                %
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium">Annual Books Goal</h3>
-              <p className="text-sm text-gray-600">
-                {readingGoals.books.current} of {readingGoals.books.target}{" "}
-                {readingGoals.books.unit}
-              </p>
-            </div>
-            <div className="relative h-10 w-10">
-              <svg viewBox="0 0 36 36" className="h-10 w-10">
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#E5E7EB"
-                  strokeWidth="3"
-                />
-                <path
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                  fill="none"
-                  stroke="#4F46E5"
-                  strokeWidth="3"
-                  strokeDasharray={`${
-                    (readingGoals.books.current / readingGoals.books.target) *
-                    100
-                  }, 100`}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                {Math.round(
-                  (readingGoals.books.current / readingGoals.books.target) * 100
-                )}
-                %
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <UserDashReadingGoals readingGoals={readingGoals} />
 
       {/* NEW SECTION: Daily Reading Habits */}
       <div className="bg-white rounded-lg shadow-md p-6">
